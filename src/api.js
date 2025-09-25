@@ -18,4 +18,13 @@ app.get("/suma", (req, res) => {
   res.send({ resultado: resultado });
 });
 
+const PORT = process.env.PORT || 3000;
+
+// Solo inicia el servidor si este archivo se ejecuta directamente
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+
 module.exports = app;
