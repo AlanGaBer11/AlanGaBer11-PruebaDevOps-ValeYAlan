@@ -1,0 +1,33 @@
+# Nombre del workflow que aparecerá en la pestaña "Actions" de GitHub
+name: Pipeline de Pruebas con Node.js
+
+# Define cuándo se ejecutará el workflow. En este caso, en cada 'push' a la rama 'main'.
+on:
+  push:
+    branches: [main]
+
+# Define los trabajos (jobs) que se van a ejecutar.
+jobs:
+  build-and-test:
+    # Especifica la máquina virtual
+    runs-on: ubuntu-latest
+
+    # Los 'steps' son la secuencia de tareas que se ejecutarán.
+    steps:
+      # 1. Clona tu repositorio en la máquina virtual.
+      - name: Clonar repositorio
+        uses: actions/checkout@v3
+
+      # 2. Configura el entorno de Node.js.
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # 3. Instala las dependencias del proyecto
+      - name: Instalar dependencias
+        run: npm install
+
+      # 4. Ejecuta el comando de pruebas que configuramos en package.json.
+      - name: Ejecutar pruebas
+        run: npm test
