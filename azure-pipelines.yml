@@ -1,0 +1,39 @@
+# Nombre del pipeline
+name: $(Build.BuildId)
+
+# Define cuándo se ejecutará el pipeline (equivalente a 'on: push')
+trigger:
+- main # Se ejecuta en cada push a la rama 'main'
+
+# Define la estrategia de recursos (equivalente a 'runs-on')
+pool:
+  vmImage: 'ubuntu-latest' # Usa un agente hospedado por Microsoft (equivalente a 'ubuntu-latest')
+
+# Define las variables del pipeline (Opcional, pero útil)
+variables:
+  nodeVersion: '18.x' # Versión de Node.js a utilizar
+
+# Define las etapas y los trabajos
+stages:
+- stage: BuildAndTest
+  displayName: Compilar y Probar Node.js
+  jobs:
+  - job: RunTests
+    displayName: Ejecución de Pruebas
+    steps:
+    
+    # 1. Tarea para configurar el entorno de Node.js
+    - task: NodeTool@0
+      displayName: 'Usar Node.js $(nodeVersion)'
+      inputs:
+        versionSpec: $(nodeVersion)
+        
+    # 2. Instalar las dependencias del proyecto (npm install)
+    - script: |
+        npm install
+      displayName: 'Instalar dependencias'
+      
+    # 3. Ejecutar el comando de pruebas (npm test)
+    - script: |
+        npm test
+      displayName: 'Ejecutar pruebas'
